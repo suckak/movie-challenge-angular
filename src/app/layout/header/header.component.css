@@ -1,0 +1,10 @@
+header {
+  background-color: var(--purple-light);
+  display: flex;
+  & a {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 1em 2em;
+  }
+}
