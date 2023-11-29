@@ -8,6 +8,7 @@ import { HeaderComponent } from './layout/header/header.component';
 import { HomeComponent } from './layout/home/home.component';
 import { MovieListComponent } from './layout/movie-list/movie-list.component';
 import { MovieListItemComponent } from './layout/movie-list-item/movie-list-item.component';
+import { LoadingComponent } from './layout/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { MovieListItemComponent } from './layout/movie-list-item/movie-list-item
     MovieListComponent,
     MovieListComponent,
     MovieListItemComponent,
+    LoadingComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],

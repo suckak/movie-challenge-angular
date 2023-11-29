@@ -8,11 +8,15 @@ import { Movie } from 'src/models/movie';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
+  isLoading = true;
   movies: Movie[] = [];
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    this.apiService.getMovieData().subscribe((data) => (this.movies = data));
+    this.apiService.getMovieData().subscribe((data) => {
+      this.movies = data;
+      this.isLoading = false;
+    });
   }
 }
