@@ -7,6 +7,6 @@ import { Movie } from 'src/models/movie';
   styleUrls: ['./movie-list-item.component.css'],
 })
 export class MovieListItemComponent {
-  @Input() movie: Movie | undefined;
+  @Input() movie!: Movie;
   constructor() {}
 }

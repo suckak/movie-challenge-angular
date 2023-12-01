@@ -22,8 +22,6 @@ export class ApiService {
 
     return this.http.get<ApiResponse>(endpoint, { headers: this.headers }).pipe(
       map((response) => {
-        console.log(response, 'response');
-
         return response.results.map(formatMovie);
       }),
       catchError(this.handleError<Movie[]>('getMovies', []))
