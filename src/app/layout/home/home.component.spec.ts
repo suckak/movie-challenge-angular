@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HomeComponent } from './home.component';
+import { HeaderComponent } from '../header/header.component';
+import { MovieListComponent } from '../movie-list/movie-list.component';
+import { LoadingComponent } from '../loading/loading.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -8,7 +11,12 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+      declarations: [
+        HomeComponent,
+        HeaderComponent,
+        MovieListComponent,
+        LoadingComponent,
+      ],
       imports: [HttpClientTestingModule],
     }).compileComponents();
 

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MovieListComponent } from './movie-list.component';
 import { mockMovieArray } from 'src/app/mocks/mockMovies';
+import { MovieListItemComponent } from '../movie-list-item/movie-list-item.component';
 
 describe('MovieListComponent', () => {
   let component: MovieListComponent;
@@ -9,7 +10,7 @@ describe('MovieListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MovieListComponent],
+      declarations: [MovieListComponent, MovieListItemComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MovieListComponent);
