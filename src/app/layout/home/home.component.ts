@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { BehaviorSubject, switchMap, map, tap } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
-import { Movie } from 'src/models/movie';
+import { DataMovies } from 'src/models/movie';
 
 @Component({
   selector: 'app-home',
@@ -9,14 +10,34 @@ import { Movie } from 'src/models/movie';
 })
 export class HomeComponent {
   isLoading = true;
-  movies: Movie[] = [];
+  dataMovies: DataMovies = {
+    metaData: {
+      pagination: {
+        currentPage: 1,
+        totalPages: 1,
+      },
+    },
+    movies: [],
+  };
+  currentPage$ = new BehaviorSubject<number>(1);
+
+  currentDataMovies$ = this.currentPage$.pipe(
+    switchMap((currentPage: number) =>
+      this.apiService.getMovieData({ page: currentPage })
+    )
+  );
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    this.apiService.getMovieData().subscribe((data) => {
-      this.movies = data;
+    this.currentDataMovies$.subscribe((data) => {
+      this.dataMovies = data;
       this.isLoading = false;
     });
   }
+
+  onSelectedPage = (nextPage: number) => {
+    this.isLoading = true;
+    this.currentPage$.next(nextPage);
+  };
 }

@@ -4,6 +4,7 @@ import { HomeComponent } from './home.component';
 import { HeaderComponent } from '../header/header.component';
 import { MovieListComponent } from '../movie-list/movie-list.component';
 import { LoadingComponent } from '../loading/loading.component';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -16,6 +17,7 @@ describe('HomeComponent', () => {
         HeaderComponent,
         MovieListComponent,
         LoadingComponent,
+        PaginationComponent,
       ],
       imports: [HttpClientTestingModule],
     }).compileComponents();

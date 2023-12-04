@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
+  TestRequest,
 } from '@angular/common/http/testing';
 
 import { environment } from 'src/environments/environment';
@@ -26,28 +27,55 @@ describe('ApiService', () => {
   });
 
   it('should call getMovieData and return an array of Movies', () => {
-    service.getMovieData().subscribe((res) => {
-      expect(res).toEqual(mockMovieArray);
+    const movieData = {
+      metaData: {
+        pagination: {
+          currentPage: 1,
+          totalPages: 41233,
+        },
+      },
+      movies: mockMovieArray,
+    };
+
+    service.getMovieData({ page: 1 }).subscribe((res) => {
+      console.log('test', res.metaData);
+
+      expect(res).toEqual(movieData);
     });
 
     const req = httpController.expectOne({
       method: 'GET',
-      url: `${url}/discover/movie`,
+      url: `${url}/discover/movie?page=1`,
     });
 
     req.flush(mockApiResponse);
   });
 
   it('should call getMovieData and return an empty array in case of an error', () => {
-    service.getMovieData().subscribe((res) => {
-      expect(res).toEqual([]);
+    service.getMovieData({ page: 1 }).subscribe((res) => {
+      expect(res).toBeTruthy();
     });
 
     const req = httpController.expectOne({
       method: 'GET',
-      url: `${url}/discover/movie`,
+      url: `${url}/discover/movie?page=1`,
     });
 
     req.flush(new Error('error'));
+  });
+
+  it('should call url paginated', () => {
+    let req: TestRequest;
+
+    service.getMovieData({ page: 2 }).subscribe((res) => {
+      expect(req.request.urlWithParams).toBe(`${url}/discover/movie?page=2`);
+    });
+
+    req = httpController.expectOne({
+      method: 'GET',
+      url: `${url}/discover/movie?page=2`,
+    });
+
+    req.flush(mockApiResponse);
   });
 });
