@@ -3,6 +3,7 @@ export type Movie = {
   title: string;
   poster: string;
   releaseYear: string;
+  genres: string[];
 };
 
 export type DataMovies = {
@@ -12,4 +13,8 @@ export type DataMovies = {
 
 export type MovieFilters = {
   page?: number;
+  genre?: number | null;
+  releaseSort?: 'asc' | 'desc' | null;
 };
+
+export type Genres = Map<number, string>;

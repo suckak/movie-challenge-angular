@@ -10,6 +10,8 @@ import { MovieListComponent } from './layout/movie-list/movie-list.component';
 import { MovieListItemComponent } from './layout/movie-list-item/movie-list-item.component';
 import { LoadingComponent } from './layout/loading/loading.component';
 import { PaginationComponent } from './layout/pagination/pagination.component';
+import { ListOptionsComponent } from './layout/list-options/list-options.component';
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,14 @@ import { PaginationComponent } from './layout/pagination/pagination.component';
     MovieListItemComponent,
     LoadingComponent,
     PaginationComponent,
+    ListOptionsComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    NgOptimizedImage,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

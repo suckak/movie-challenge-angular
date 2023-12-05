@@ -1,5 +1,20 @@
-<dl class="w-56 h-96 overflow-hidden rounded-xl border-2 shadow-md">
-  <img [src]="movie.poster" alt="movie poster" class="border-b-2" />
-  <dt class="text-base px-1 font-bold truncate">{{ movie.title }}</dt>
+<dl class="w-60 h-96 overflow-hidden rounded-xl border-2 shadow-md">
+  <figure class="h-72 border-b-2 overflow-hidden">
+    <img
+      class="h-auto max-w-full rounded-lg"
+      [ngSrc]="movie.poster"
+      width="300"
+      height="450"
+      alt="poster for movie: {{ movie.title }}"
+    />
+    <figcaption
+      class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400"
+    >
+      {{ movie.title }}
+    </figcaption>
+  </figure>
+
+  <dt class="text-base px-3 font-bold truncate">{{ movie.title }}</dt>
+  <dt class="text-sm px-1 truncate m-1">{{ movie.genres }}</dt>
   <dt class="text-sm px-1">({{ movie.releaseYear }})</dt>
 </dl>

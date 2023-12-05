@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/shared/services/api.service';
-import { DataMovies } from 'src/models/movie';
+import { DataMovies, MovieFilters } from 'src/models/movie';
 
 @Component({
   selector: 'app-home',
@@ -20,11 +20,19 @@ export class HomeComponent {
     },
     movies: [],
   };
-  currentPage$ = new BehaviorSubject<number>(1);
+  currentFilters$ = new BehaviorSubject<MovieFilters>({});
+  genres = new Map();
 
-  currentDataMovies$ = this.currentPage$.pipe(
-    switchMap((currentPage: number) =>
-      this.apiService.getMovieData({ page: currentPage })
+  currentDataMovies$ = this.currentFilters$.pipe(
+    switchMap((filters: MovieFilters) =>
+      this.apiService.getMovieData(
+        {
+          page: filters.page,
+          genre: filters.genre,
+          releaseSort: filters.releaseSort,
+        },
+        this.genres
+      )
     )
   );
 
@@ -35,26 +43,67 @@ export class HomeComponent {
   ) {}
 
   ngOnInit() {
-    console.log(this.activatedRoute.queryParams, 'params');
-    this.activatedRoute.queryParams.subscribe((params) => {
-      if (params['currentPage']) {
-        this.currentPage$.next(params['currentPage']);
-      }
-    });
+    this.apiService.getMovieGenreData().subscribe((res) => {
+      this.genres = res;
+      this.activatedRoute.queryParams
+        .subscribe((params) => {
+          if (params['currentPage']) {
+            this.currentFilters$.next({
+              ...this.currentFilters$.getValue(),
+              page: params['currentPage'],
+            });
+          }
+        })
+        .unsubscribe();
 
-    this.currentDataMovies$.subscribe((data) => {
-      this.dataMovies = data;
-      this.isLoading = false;
+      this.currentDataMovies$.subscribe((data) => {
+        this.dataMovies = data;
+        this.isLoading = false;
+      });
     });
   }
 
   onSelectedPage = (nextPage: number) => {
     this.isLoading = true;
-    this.currentPage$.next(nextPage);
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: { currentPage: nextPage },
-      queryParamsHandling: 'merge',
+    this.currentFilters$.next({
+      ...this.currentFilters$.getValue(),
+      page: nextPage,
+    });
+
+    this.updateURL(nextPage);
+  };
+
+  onSelectedFilter = (genre: number) => {
+    this.isLoading = true;
+    this.currentFilters$.next({
+      ...this.currentFilters$.getValue(),
+      genre,
     });
   };
+
+  onSelectedSort = (sort: 'asc' | 'desc') => {
+    this.isLoading = true;
+    this.currentFilters$.next({
+      ...this.currentFilters$.getValue(),
+      releaseSort: sort,
+    });
+  };
+
+  clearFilters = () => {
+    this.isLoading = true;
+    this.currentFilters$.next({
+      page: 1,
+      releaseSort: null,
+      genre: null,
+    });
+    this.updateURL(1);
+  };
+
+  updateURL(page: number) {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { currentPage: page },
+      queryParamsHandling: 'merge',
+    });
+  }
 }
