@@ -12,6 +12,7 @@ import { LoadingComponent } from './layout/loading/loading.component';
 import { PaginationComponent } from './layout/pagination/pagination.component';
 import { ListOptionsComponent } from './layout/list-options/list-options.component';
 import { NgOptimizedImage } from '@angular/common';
+import { MovieDetailComponent } from './layout/movie-detail/movie-detail.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { NgOptimizedImage } from '@angular/common';
     LoadingComponent,
     PaginationComponent,
     ListOptionsComponent,
+    MovieDetailComponent,
   ],
   imports: [
     BrowserModule,

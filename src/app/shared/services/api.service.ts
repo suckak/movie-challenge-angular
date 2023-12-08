@@ -82,6 +82,13 @@ export class ApiService {
       );
   }
 
+  getMovieDetail(id: number) {
+    const endpoint = `${environment.URL_API}/movie/${id}`;
+    return this.http
+      .get(endpoint, { headers: this.headers })
+      .pipe(map((res) => formatMovie(res)));
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(error);
