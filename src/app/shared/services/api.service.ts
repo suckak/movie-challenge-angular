@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, catchError, Observable, of } from 'rxjs';
+import { map, catchError, Observable, of, retry } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { formatMovie } from 'src/utils/transformers';
@@ -21,6 +21,7 @@ export class ApiService {
     const endpoint = `${environment.URL_API}/discover/movie`;
 
     return this.http.get<ApiResponse>(endpoint, { headers: this.headers }).pipe(
+      retry(1),
       map((response) => {
         return response.results.map(formatMovie);
       }),
@@ -29,7 +30,7 @@ export class ApiService {
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+    return (error: HttpErrorResponse): Observable<T> => {
       console.error(`${operation} failed: ${error.message}`);
 
       return of(result as T);
