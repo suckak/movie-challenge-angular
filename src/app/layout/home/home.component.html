@@ -1,5 +1,8 @@
 <div>
   <app-header></app-header>
   <app-loading *ngIf="isLoading"></app-loading>
-  <app-movie-list *ngIf="!isLoading" [movies]="movies"></app-movie-list>
+  <app-movie-list
+    *ngIf="movies && !isLoading"
+    [movies]="movies"
+  ></app-movie-list>
 </div>

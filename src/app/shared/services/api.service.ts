@@ -1,39 +1,49 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, catchError, Observable, of, retry } from 'rxjs';
+import { map, catchError, Observable, of } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { formatMovie } from 'src/utils/transformers';
-import { ApiResponse } from 'src/app/interfaces/apiResponse';
 import { Movie } from 'src/models/movie';
+import { CustomHttpClient } from 'src/utils/customHttpClient';
+import { requestResponse } from 'src/app/interfaces/HttpRequests';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  headers = {
+  headers: HttpHeaders = new HttpHeaders({
     Authorization: `Bearer ${environment.TOKEN_API}`,
-  };
+  });
 
-  constructor(private http: HttpClient) {}
+  constructor(private customHttp: CustomHttpClient) {}
 
-  getMovieData() {
+  getMovieData(): Observable<requestResponse<Movie[]>> {
     const endpoint = `${environment.URL_API}/discover/movie`;
 
-    return this.http.get<ApiResponse>(endpoint, { headers: this.headers }).pipe(
-      retry(1),
+    return this.customHttp.request('GET', endpoint, this.headers).pipe(
       map((response) => {
-        return response.results.map(formatMovie);
+        return {
+          ...response,
+          data:
+            response.data && response.error === null
+              ? response.data.results.map(formatMovie)
+              : [],
+        };
       }),
       catchError(this.handleError<Movie[]>('getMovies', []))
     );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
-    return (error: HttpErrorResponse): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
+    return (error: HttpErrorResponse): Observable<requestResponse<T>> => {
+      console.error(operation, error);
 
-      return of(result as T);
+      return of({
+        isLoading: false,
+        data: result as T,
+        error,
+      });
     };
   }
 }

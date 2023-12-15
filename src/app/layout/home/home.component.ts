@@ -1,4 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { Movie } from 'src/models/movie';
 
@@ -8,15 +10,20 @@ import { Movie } from 'src/models/movie';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  isLoading = true;
-  movies: Movie[] = [];
+  isLoading = false;
+  movies: Movie[] | null = [];
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private toastr: ToastrService) {}
 
   ngOnInit() {
-    this.apiService.getMovieData().subscribe((data) => {
-      this.movies = data;
-      this.isLoading = false;
+    this.apiService.getMovieData().subscribe((response) => {
+      this.isLoading = response.isLoading;
+
+      if (response.error) {
+        this.toastr.error(response.error.message);
+      } else {
+        this.movies = response.data as Movie[];
+      }
     });
   }
 }

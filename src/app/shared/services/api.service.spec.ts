@@ -25,9 +25,12 @@ describe('ApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call getMovieData and return an array of Movies', () => {
+  it('should call getMovieData and return an array of Movies in data', () => {
     service.getMovieData().subscribe((res) => {
-      expect(res).toEqual(mockMovieArray);
+      if (!res.isLoading) {
+        expect(res.data).toEqual(mockMovieArray);
+        expect(res.error).toBeNull();
+      }
     });
 
     const req = httpController.expectOne({
@@ -38,9 +41,12 @@ describe('ApiService', () => {
     req.flush(mockApiResponse);
   });
 
-  it('should call getMovieData and return an empty array in case of an error', () => {
+  it('should call getMovieData and return an error and empty array in case of an error', () => {
     service.getMovieData().subscribe((res) => {
-      expect(res).toEqual([]);
+      if (!res.isLoading) {
+        expect(res.data).toEqual([]);
+        expect(res.error).toBeDefined();
+      }
     });
 
     const req = httpController.expectOne({

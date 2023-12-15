@@ -5,22 +5,30 @@ import {
   tick,
 } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { defer } from 'rxjs';
+
 import { HomeComponent } from './home.component';
 import { HeaderComponent } from '../header/header.component';
 import { MovieListComponent } from '../movie-list/movie-list.component';
 import { LoadingComponent } from '../loading/loading.component';
 import { ApiService } from 'src/app/shared/services/api.service';
-import { defer } from 'rxjs';
 import { mockMovieArray } from 'src/app/mocks/mockMovies';
 import { MovieListItemComponent } from '../movie-list-item/movie-list-item.component';
 
 class MockApiService {
-  getMovieData() {
-    console.log('Mock Service');
+  reponse = {
+    isLoading: true,
+    error: null,
+    data: null,
+  };
 
-    //return of(mockMovieArray).pipe(delay(100));
-    return defer(() => Promise.resolve(mockMovieArray));
-  }
+  getMovieData = () =>
+    defer(() => [
+      Promise.resolve(this.reponse),
+      Promise.resolve({ ...this.reponse, data: mockMovieArray }),
+    ]);
 }
 
 describe('HomeComponent', () => {
@@ -35,7 +43,11 @@ describe('HomeComponent', () => {
         LoadingComponent,
         MovieListItemComponent,
       ],
-      imports: [HttpClientTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+      ],
       providers: [
         {
           provide: ApiService,
