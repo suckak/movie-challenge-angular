@@ -11,6 +11,7 @@ import { HomeComponent } from './layout/home/home.component';
 import { MovieListComponent } from './layout/movie-list/movie-list.component';
 import { MovieListItemComponent } from './layout/movie-list-item/movie-list-item.component';
 import { LoadingComponent } from './layout/loading/loading.component';
+import { PaginationComponent } from './layout/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { LoadingComponent } from './layout/loading/loading.component';
     MovieListComponent,
     MovieListItemComponent,
     LoadingComponent,
+    PaginationComponent,
   ],
   imports: [
     BrowserModule,

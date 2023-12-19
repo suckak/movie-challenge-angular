@@ -2,7 +2,13 @@
   <app-header></app-header>
   <app-loading *ngIf="isLoading"></app-loading>
   <app-movie-list
-    *ngIf="movies && !isLoading"
-    [movies]="movies"
+    *ngIf="dataMovies?.movies && !isLoading"
+    [movies]="dataMovies?.movies || []"
   ></app-movie-list>
+  <app-pagination
+    *ngIf="dataMovies"
+    [currentPage]="dataMovies.metaData.pagination.currentPage"
+    [totalPages]="dataMovies.metaData.pagination.totalPages"
+    (page)="onSelectedPage($event)"
+  ></app-pagination>
 </div>

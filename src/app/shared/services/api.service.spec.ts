@@ -26,32 +26,32 @@ describe('ApiService', () => {
   });
 
   it('should call getMovieData and return an array of Movies in data', () => {
-    service.getMovieData().subscribe((res) => {
+    service.getMovieData({ page: 1 }).subscribe((res) => {
       if (!res.isLoading) {
-        expect(res.data).toEqual(mockMovieArray);
+        expect(res.data?.movies).toEqual(mockMovieArray);
         expect(res.error).toBeNull();
       }
     });
 
     const req = httpController.expectOne({
       method: 'GET',
-      url: `${url}/discover/movie`,
+      url: `${url}/discover/movie?page=1`,
     });
 
     req.flush(mockApiResponse);
   });
 
   it('should call getMovieData and return an error and empty array in case of an error', () => {
-    service.getMovieData().subscribe((res) => {
+    service.getMovieData({ page: 1 }).subscribe((res) => {
       if (!res.isLoading) {
-        expect(res.data).toEqual([]);
+        expect(res.data?.movies).toEqual([]);
         expect(res.error).toBeDefined();
       }
     });
 
     const req = httpController.expectOne({
       method: 'GET',
-      url: `${url}/discover/movie`,
+      url: `${url}/discover/movie?page=1`,
     });
 
     req.flush(new Error('error'));

@@ -4,7 +4,7 @@ import { map, catchError, Observable, of } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { formatMovie } from 'src/utils/transformers';
-import { Movie } from 'src/models/movie';
+import { DataMovies, MovieFilters } from 'src/models/movie';
 import { CustomHttpClient } from 'src/utils/customHttpClient';
 import { requestResponse } from 'src/app/interfaces/HttpRequests';
 
@@ -18,20 +18,42 @@ export class ApiService {
 
   constructor(private customHttp: CustomHttpClient) {}
 
-  getMovieData(): Observable<requestResponse<Movie[]>> {
-    const endpoint = `${environment.URL_API}/discover/movie`;
+  getMovieData({
+    page = 1,
+  }: MovieFilters): Observable<requestResponse<DataMovies>> {
+    const queryPage = page ? `page=${page}` : '';
+
+    const endpoint = `${environment.URL_API}/discover/movie?${queryPage}`;
 
     return this.customHttp.request('GET', endpoint, this.headers).pipe(
       map((response) => {
         return {
           ...response,
-          data:
-            response.data && response.error === null
-              ? response.data.results.map(formatMovie)
-              : [],
+          data: {
+            metaData: {
+              pagination: {
+                currentPage: response.data?.page,
+                totalPages: response.data?.total_pages,
+              },
+            },
+            movies:
+              response.data && response.error === null
+                ? response.data.results.map(formatMovie)
+                : [],
+          } as DataMovies,
         };
       }),
-      catchError(this.handleError<Movie[]>('getMovies', []))
+      catchError(
+        this.handleError<DataMovies>('getMovies', {
+          metaData: {
+            pagination: {
+              currentPage: 0,
+              totalPages: 0,
+            },
+          },
+          movies: [],
+        })
+      )
     );
   }
 
