@@ -1,14 +1,22 @@
 <div>
   <app-header></app-header>
+  <app-list-options
+    [genres]="genres"
+    (genre)="onSelectedFilter($event)"
+    (sort)="onSelectedSort($event)"
+    (clear)="clearFilters()"
+  ></app-list-options>
   <app-loading *ngIf="isLoading"></app-loading>
-  <app-movie-list
-    *ngIf="dataMovies?.movies && !isLoading"
-    [movies]="dataMovies?.movies || []"
-  ></app-movie-list>
-  <app-pagination
-    *ngIf="dataMovies"
-    [currentPage]="dataMovies.metaData.pagination.currentPage"
-    [totalPages]="dataMovies.metaData.pagination.totalPages"
-    (page)="onSelectedPage($event)"
-  ></app-pagination>
+  <ng-container *ngIf="!isLoading">
+    <app-movie-list
+      *ngIf="dataMovies?.movies"
+      [movies]="dataMovies?.movies || []"
+    ></app-movie-list>
+    <app-pagination
+      *ngIf="dataMovies"
+      [currentPage]="dataMovies.metaData.pagination.currentPage"
+      [totalPages]="dataMovies.metaData.pagination.totalPages"
+      (page)="onSelectedPage($event)"
+    ></app-pagination
+  ></ng-container>
 </div>
