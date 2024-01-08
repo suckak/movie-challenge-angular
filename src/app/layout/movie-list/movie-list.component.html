@@ -1,0 +1,8 @@
+<section class="py-4">
+  <h3 *ngIf="!movies.length" class="text-center">Sin resultados :(</h3>
+  <ul class="flex flex-wrap gap-4 justify-evenly items-start">
+    <li *ngFor="let movie of movies">
+      <app-movie-list-item [movie]="movie"></app-movie-list-item>
+    </li>
+  </ul>
+</section>

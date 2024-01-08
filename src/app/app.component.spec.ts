@@ -1,16 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './layout/home/home.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
       ],
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent, HomeComponent, HeaderComponent],
     }).compileComponents();
   });
 
@@ -26,10 +32,9 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('movie_challenge');
   });
 
-  it('should render title', () => {
+  it(`shuold render 'app-home' component`, () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('movie_challenge app is running!');
+    const document: HTMLElement = fixture.nativeElement;
+    expect(document.querySelector('app-home')).toBeTruthy();
   });
 });
