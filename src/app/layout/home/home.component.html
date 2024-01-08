@@ -1,10 +1,11 @@
 <div>
-  <app-header></app-header>
   <app-list-options
     [genres]="genres"
     (genre)="onSelectedFilter($event)"
     (sort)="onSelectedSort($event)"
     (clear)="clearFilters()"
+    [filterValue]="currentFilters$.getValue().genre?.toString() || ''"
+    [sortValue]="currentFilters$.getValue().releaseSort || ''"
   ></app-list-options>
   <app-loading *ngIf="isLoading"></app-loading>
   <ng-container *ngIf="!isLoading">

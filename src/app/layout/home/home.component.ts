@@ -51,12 +51,20 @@ export class HomeComponent {
         this.genres = res.data as Genres;
         this.activatedRoute.queryParams
           .subscribe((params) => {
+            const filters = { ...this.currentFilters$.getValue() };
             if (params['currentPage']) {
-              this.currentFilters$.next({
-                ...this.currentFilters$.getValue(),
-                page: params['currentPage'],
-              });
+              filters['page'] = params['currentPage'];
             }
+
+            if (params['genre']) {
+              filters['genre'] = params['genre'];
+            }
+
+            if (params['sort']) {
+              filters['releaseSort'] = params['sort'];
+            }
+
+            this.currentFilters$.next(filters);
           })
           .unsubscribe();
 
@@ -78,7 +86,7 @@ export class HomeComponent {
       ...this.currentFilters$.getValue(),
       page: nextPage,
     });
-    this.updateURL(nextPage);
+    this.updateURL({ page: nextPage });
   };
 
   onSelectedFilter = (genre: number) => {
@@ -86,6 +94,7 @@ export class HomeComponent {
       ...this.currentFilters$.getValue(),
       genre,
     });
+    this.updateURL({ genre });
   };
 
   onSelectedSort = (sort: 'asc' | 'desc') => {
@@ -93,6 +102,7 @@ export class HomeComponent {
       ...this.currentFilters$.getValue(),
       releaseSort: sort,
     });
+    this.updateURL({ releaseSort: sort });
   };
 
   clearFilters = () => {
@@ -101,14 +111,25 @@ export class HomeComponent {
       releaseSort: null,
       genre: null,
     });
-    this.updateURL(1);
+    this.updateURL(null);
   };
 
-  updateURL(page: number) {
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: { currentPage: page },
-      queryParamsHandling: 'merge',
-    });
+  updateURL(filters: MovieFilters | null) {
+    if (!filters) {
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+      });
+    } else {
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: {
+          currentPage: filters.page || this.currentFilters$.getValue().page,
+          genre: filters.genre || this.currentFilters$.getValue().genre,
+          sort:
+            filters.releaseSort || this.currentFilters$.getValue().releaseSort,
+        },
+        queryParamsHandling: 'merge',
+      });
+    }
   }
 }

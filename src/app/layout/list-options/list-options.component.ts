@@ -18,16 +18,14 @@ export class ListOptionsComponent {
 
   sortTypes = ['asc', 'desc'];
 
-  filterValue = '';
-  sortValue = '';
+  @Input() filterValue = '';
+  @Input() sortValue = '';
 
   constructor() {}
 
   onFilterChange(event: Event) {
     const select = event.currentTarget as HTMLInputElement;
     this.genre.emit(parseInt(select.value));
-    console.log(select.value);
-
     this.filterValue = select.value;
   }
 

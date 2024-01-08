@@ -4,6 +4,8 @@ export type Movie = {
   poster: string;
   releaseYear: string;
   genres: string[];
+  tagline: string;
+  overview: string;
 };
 
 export type DataMovies = {

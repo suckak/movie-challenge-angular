@@ -10,8 +10,13 @@ import { environment } from 'src/environments/environment';
 import { formatMovie, formatGenre } from 'src/utils/transformers';
 import { DataMovies, Genres, MovieFilters } from 'src/models/movie';
 import { CustomHttpClient } from 'src/utils/customHttpClient';
+import { HttpClient } from '@angular/common/http';
 import { requestResponse } from 'src/app/interfaces/HttpRequests';
-import { ApiGenreResponse, ApiResponse } from 'src/app/interfaces/apiResponse';
+import {
+  ApiGenreResponse,
+  ApiResponse,
+  ApiResponseMovie,
+} from 'src/app/interfaces/apiResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +26,7 @@ export class ApiService {
     Authorization: `Bearer ${environment.TOKEN_API}`,
   });
 
-  constructor(private customHttp: CustomHttpClient) {}
+  constructor(private customHttp: CustomHttpClient, private http: HttpClient) {}
 
   getMovieData(
     { page = 1, genre = null, releaseSort = null }: MovieFilters,
@@ -91,6 +96,27 @@ export class ApiService {
         })),
         catchError(this.handleError<Genres>('getGenres', new Map()))
       );
+  }
+
+  getMovieDetail(id: number | string) {
+    const endpoint = `${environment.URL_API}/movie/${id}`;
+    return this.customHttp.request('GET', endpoint, this.headers).pipe(
+      map((response) => {
+        return {
+          ...response,
+          data: response.data
+            ? formatMovie(response.data as ApiResponseMovie)
+            : null,
+        };
+      })
+    );
+  }
+
+  getMovieDetailResolver(id: number | string) {
+    const endpoint = `${environment.URL_API}/movie/${id}`;
+    return this.http
+      .get(endpoint, { headers: this.headers })
+      .pipe(map((response) => formatMovie(response as ApiResponseMovie)));
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

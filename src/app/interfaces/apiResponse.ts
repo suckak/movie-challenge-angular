@@ -10,7 +10,10 @@ export interface ApiResponseMovie {
   title: string;
   release_date: string;
   poster_path: string;
+  genres: { id: number; name: string }[];
   genre_ids: number[];
+  tagline: string;
+  overview: string;
 }
 
 export interface ApiGenreResponse {
