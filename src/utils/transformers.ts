@@ -2,8 +2,18 @@ import { Genres, Movie } from 'src/models/movie';
 import { ApiResponseMovie } from 'src/app/interfaces/apiResponse';
 
 export function formatMovie(data: ApiResponseMovie, genres?: Genres): Movie {
-  const { id, title, release_date, poster_path, genre_ids, tagline, overview } =
-    data;
+  const {
+    id,
+    title,
+    release_date,
+    poster_path,
+    genre_ids,
+    tagline,
+    overview,
+    vote_average,
+    budget,
+    vote_count,
+  } = data;
 
   const imgBaseURL = 'https://image.tmdb.org/t/p/w500';
 
@@ -19,6 +29,9 @@ export function formatMovie(data: ApiResponseMovie, genres?: Genres): Movie {
     genres: genresNames,
     tagline,
     overview,
+    rating: vote_average ? Math.ceil((vote_average * 5) / 10) : undefined,
+    budget,
+    votes: vote_count,
   };
 }
 

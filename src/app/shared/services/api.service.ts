@@ -112,13 +112,6 @@ export class ApiService {
     );
   }
 
-  getMovieDetailResolver(id: number | string) {
-    const endpoint = `${environment.URL_API}/movie/${id}`;
-    return this.http
-      .get(endpoint, { headers: this.headers })
-      .pipe(map((response) => formatMovie(response as ApiResponseMovie)));
-  }
-
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: HttpErrorResponse): Observable<requestResponse<T>> => {
       console.error(operation, error);
