@@ -6,6 +6,9 @@ export type Movie = {
   genres: string[];
   tagline: string;
   overview: string;
+  rating?: number;
+  budget?: number;
+  votes?: number;
 };
 
 export type DataMovies = {

@@ -15,6 +15,7 @@ import { LoadingComponent } from './layout/loading/loading.component';
 import { PaginationComponent } from './layout/pagination/pagination.component';
 import { ListOptionsComponent } from './layout/list-options/list-options.component';
 import { NotFoundComponent } from './layout/not-found/not-found.component';
+import { MovieDetailComponent } from './layout/movie-detail/movie-detail.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { NotFoundComponent } from './layout/not-found/not-found.component';
     PaginationComponent,
     ListOptionsComponent,
     NotFoundComponent,
+    MovieDetailComponent,
   ],
   imports: [
     BrowserModule,

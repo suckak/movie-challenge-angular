@@ -14,6 +14,9 @@ export interface ApiResponseMovie {
   genre_ids: number[];
   tagline: string;
   overview: string;
+  vote_average?: number;
+  budget?: number;
+  vote_count?: number;
 }
 
 export interface ApiGenreResponse {
